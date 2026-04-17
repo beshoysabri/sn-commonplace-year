@@ -5,6 +5,7 @@ export type ISODateTime = string;
 export type ViewMode =
   | 'book'
   | 'list'
+  | 'quotes'
   | 'calendar'
   | 'people'
   | 'themes'
@@ -176,6 +177,7 @@ export const REFERENCE_STATUSES: readonly ReferenceStatus[] = [
 export const VIEW_MODES: readonly ViewMode[] = [
   'book',
   'list',
+  'quotes',
   'calendar',
   'people',
   'themes',

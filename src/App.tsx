@@ -19,6 +19,7 @@ import type {
 } from './types/commonplace';
 import { BookView } from './components/views/BookView';
 import { ListView } from './components/views/ListView';
+import { QuotesView } from './components/views/QuotesView';
 import { PeopleView } from './components/views/PeopleView';
 import { ReferencesView } from './components/views/ReferencesView';
 import { ThemesView } from './components/views/ThemesView';
@@ -45,6 +46,7 @@ const INSIDE_SN =
 const IMPLEMENTED_VIEWS: readonly ViewMode[] = [
   'book',
   'list',
+  'quotes',
   'calendar',
   'people',
   'themes',
@@ -458,21 +460,25 @@ function App() {
           break;
         case '3':
           e.preventDefault();
-          setView('calendar');
+          setView('quotes');
           break;
         case '4':
           e.preventDefault();
-          setView('people');
+          setView('calendar');
           break;
         case '5':
           e.preventDefault();
-          setView('themes');
+          setView('people');
           break;
         case '6':
           e.preventDefault();
-          setView('references');
+          setView('themes');
           break;
         case '7':
+          e.preventDefault();
+          setView('references');
+          break;
+        case '8':
           e.preventDefault();
           setView('insights');
           break;
@@ -554,6 +560,15 @@ function App() {
       )}
       {view === 'list' && (
         <ListView
+          data={data}
+          onChange={handleChange}
+          onOpenLesson={(l) => setEditingLesson({ lesson: l, isNew: false })}
+          showImportantOnly={showImportantOnly}
+          searchQuery={searchQuery}
+        />
+      )}
+      {view === 'quotes' && (
+        <QuotesView
           data={data}
           onChange={handleChange}
           onOpenLesson={(l) => setEditingLesson({ lesson: l, isNew: false })}

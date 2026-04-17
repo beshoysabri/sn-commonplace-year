@@ -2637,8 +2637,97 @@ body.sn-embedded {
 }
 
 /* =============================================================
+ * Quotes view
+ * ============================================================= */
+.cp-quotes-view {
+  overflow-y: auto;
+  padding: 20px 24px 80px;
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
+}
+.cp-quotes-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+.cp-quotes-count {
+  margin-left: auto;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--cp-muted);
+  font-variant-numeric: tabular-nums;
+}
+.cp-quotes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cp-quote-card {
+  position: relative;
+  padding: 16px 20px 14px 20px;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-sm);
+  background: var(--cp-bg);
+  cursor: pointer;
+  transition: border-color var(--cp-transition), background var(--cp-transition);
+}
+.cp-quote-card:hover {
+  border-color: var(--cp-accent);
+}
+.cp-quote-card.important {
+  box-shadow: inset 2px 0 0 var(--cp-priority);
+}
+.cp-quote-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.cp-quote-head .cp-priority-toggle {
+  margin-left: auto;
+}
+.cp-quote-text {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+  color: var(--cp-fg);
+  margin: 0;
+  border-left: 2px solid var(--cp-border);
+  padding-left: 14px;
+}
+.cp-quote-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--cp-border);
+}
+.cp-quote-attribution {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9375rem;
+  color: var(--cp-muted);
+}
+.cp-quote-themes {
+  display: inline-flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* =============================================================
  * Mobile refinements
  * ============================================================= */
+
+/* Phone (≤ 520px) — existing refinements. */
 @media (max-width: 520px) {
   /* Modals become bottom sheets: stick to bottom, full-width, rounded top only. */
   .cp-modal-overlay {
@@ -2655,17 +2744,162 @@ body.sn-embedded {
   .cp-modal-header { padding: 12px 16px; }
   .cp-modal-footer { padding: 12px 16px; }
 
-  /* Header wraps more gracefully. */
+  .cp-quotes-view { padding: 12px 12px 80px; }
+  .cp-quote-card { padding: 12px 14px; }
+}
+
+/* iPhone 16 territory (≤ 420px) — tighter still. Header restructures
+ * into a three-row stack so nothing gets cut off. */
+@media (max-width: 420px) {
   .cp-header {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .cp-header-identity {
+    justify-content: center;
+  }
+  .cp-header-viewswitch {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .cp-header-viewswitch::-webkit-scrollbar { display: none; }
+  .cp-view-tab { flex-shrink: 0; padding: 4px 8px; }
+  .cp-view-tab-label { display: none; }
+
+  .cp-header-controls {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 6px;
+  }
+  .cp-header-search {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  /* Hide quieter buttons on phone; still reachable via keyboard / modal. */
+  .cp-header-controls > button[title='Keyboard shortcuts'],
+  .cp-header-controls > button[title='Paper mode'],
+  .cp-header-controls > button[title='Paper mode on'] {
+    display: none;
+  }
+
+  /* Book view at iPhone 16 width — drop the 48px gutter; lesson number
+   * floats above the body. */
+  .cp-book-view { padding: 12px 4px 80px; }
+  .cp-book-entry {
+    padding: 20px 16px 20px 16px;
+  }
+  .cp-book-entry.important::before {
+    left: 4px;
+  }
+  .cp-book-gutter {
+    position: static;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 0 4px 0;
+    width: auto;
+  }
+  .cp-book-num {
+    background: var(--cp-surface);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .cp-book-actions { right: 4px; top: 8px; opacity: 1; }
+  .cp-book-title { font-size: 1.125rem; }
+  .cp-book-paragraph { font-size: 1rem; line-height: 1.65; }
+  .cp-book-original-text { font-size: 1rem; }
+  .cp-book-footer { font-size: 0.75rem; }
+  .cp-book-attribution { font-size: 0.875rem; }
+  .cp-chapter-opener {
+    margin: 12px auto 32px;
+    gap: 10px;
+  }
+  .cp-chapter-year { font-size: clamp(3.5rem, 16vw, 5rem); }
+  .cp-chapter-summary,
+  .cp-chapter-placeholder,
+  .cp-chapter-placeholder-btn {
+    font-size: 0.9375rem;
+  }
+  .cp-chapter-edit {
+    position: static;
+    margin: 0 auto;
+  }
+
+  /* People view: stack sidebar on top of source page, not a full-height
+   * split. */
+  .cp-people-view {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .cp-people-sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--cp-border);
+    max-height: 220px;
+  }
+  .cp-people-main { padding: 16px 14px 80px; }
+  .cp-source-header {
+    grid-template-columns: 56px 1fr;
+    grid-template-areas:
+      'avatar title'
+      'edit   edit';
+    gap: 12px;
+  }
+  .cp-source-avatar-large { width: 56px; height: 56px; font-size: 1.125rem; grid-area: avatar; }
+  .cp-source-title-block { grid-area: title; }
+  .cp-source-header > button { grid-area: edit; justify-self: start; }
+  .cp-source-name { font-size: 1.5rem; }
+
+  /* List view: hide meta column entirely; number + title only. */
+  .cp-list-view { padding: 12px 8px 80px; }
+  .cp-list-row {
+    grid-template-columns: 52px 1fr auto;
+    gap: 8px;
+    padding: 10px 6px;
+  }
+  .cp-list-meta { display: none; }
+
+  /* Quotes view */
+  .cp-quotes-view { padding: 10px 8px 80px; }
+  .cp-quote-card { padding: 12px 14px; }
+  .cp-quote-text { font-size: 1rem; padding-left: 12px; }
+
+  /* Calendar view: already drops to 1-col at 520. */
+  .cp-calendar-view { padding: 12px 8px 80px; }
+  .cp-calendar-grid { gap: 8px; }
+  .cp-month-cell { padding: 8px; }
+
+  /* References view */
+  .cp-references-view { padding: 12px 8px 80px; }
+  .cp-reference-head {
+    grid-template-columns: 16px 36px 1fr auto;
     gap: 8px;
   }
-  .cp-header-controls {
-    width: 100%;
-    justify-content: space-between;
-  }
-  .cp-header-search { flex: 1; width: auto; min-width: 0; }
-  .cp-header-viewswitch { width: 100%; overflow-x: auto; }
+  .cp-reference-cover { width: 36px; height: 48px; }
+  .cp-reference-title { font-size: 0.9375rem; }
+  .cp-reference-meta { font-size: 0.6875rem; }
+  .cp-reference-count { display: none; }
+  .cp-reference-body { padding-left: 24px; }
+
+  /* Themes view */
+  .cp-themes-view { padding: 12px 8px 80px; }
+  .cp-themes-grid { grid-template-columns: 1fr; gap: 12px; }
+
+  /* Insights view: 1 column; make charts narrower. */
+  .cp-insights-view { padding: 12px 8px 80px; }
+  .cp-insights-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .cp-stats-card { padding: 12px; }
+  .cp-stats-value { font-size: 1.5rem; }
+  .cp-insights-grid { grid-template-columns: 1fr; gap: 12px; }
+  .cp-insights-panel { padding: 12px; }
+
+  /* Form tweaks in modals */
+  .cp-form-row-inline { grid-template-columns: 1fr; }
+
+  /* On-this-day banner wraps */
+  .cp-otd-banner { flex-wrap: wrap; padding: 8px 10px; }
+  .cp-otd-body { white-space: normal; }
 }
 
 .cp-book-reflection {

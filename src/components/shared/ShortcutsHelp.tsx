@@ -11,11 +11,12 @@ const DEFAULT_SHORTCUTS: ShortcutGroup[] = [
     items: [
       { keys: ['1'], description: 'Book view' },
       { keys: ['2'], description: 'List view' },
-      { keys: ['3'], description: 'Calendar view' },
-      { keys: ['4'], description: 'People view' },
-      { keys: ['5'], description: 'Themes view' },
-      { keys: ['6'], description: 'References view' },
-      { keys: ['7'], description: 'Insights view' },
+      { keys: ['3'], description: 'Quotes view' },
+      { keys: ['4'], description: 'Calendar view' },
+      { keys: ['5'], description: 'People view' },
+      { keys: ['6'], description: 'Themes view' },
+      { keys: ['7'], description: 'References view' },
+      { keys: ['8'], description: 'Insights view' },
     ],
   },
   {

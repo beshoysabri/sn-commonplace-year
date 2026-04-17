@@ -7,6 +7,7 @@ import {
   KeyboardIcon,
   MenuIcon,
   PlusIcon,
+  QuillIcon,
   StarOutlineIcon,
   StarFilledIcon,
   TagIcon,
@@ -41,16 +42,18 @@ const VIEW_META: Record<
 > = {
   book:       { label: 'Book',       Icon: BookOpenIcon,        shortcut: '1' },
   list:       { label: 'List',       Icon: MenuIcon,            shortcut: '2' },
-  calendar:   { label: 'Calendar',   Icon: CalendarIcon,        shortcut: '3' },
-  people:     { label: 'People',     Icon: UserSilhouetteIcon,  shortcut: '4' },
-  themes:     { label: 'Themes',     Icon: TagIcon,             shortcut: '5' },
-  references: { label: 'References', Icon: BookmarkIcon,        shortcut: '6' },
-  insights:   { label: 'Insights',   Icon: InfoIcon,            shortcut: '7' },
+  quotes:     { label: 'Quotes',     Icon: QuillIcon,           shortcut: '3' },
+  calendar:   { label: 'Calendar',   Icon: CalendarIcon,        shortcut: '4' },
+  people:     { label: 'People',     Icon: UserSilhouetteIcon,  shortcut: '5' },
+  themes:     { label: 'Themes',     Icon: TagIcon,             shortcut: '6' },
+  references: { label: 'References', Icon: BookmarkIcon,        shortcut: '7' },
+  insights:   { label: 'Insights',   Icon: InfoIcon,            shortcut: '8' },
 };
 
 const ALL_VIEWS: ViewMode[] = [
   'book',
   'list',
+  'quotes',
   'calendar',
   'people',
   'themes',
