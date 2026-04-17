@@ -9,7 +9,6 @@ import { Modal } from './shared/Modal';
 import { PriorityToggle } from './shared/PriorityToggle';
 import { ConfirmDialog } from './shared/ConfirmDialog';
 import { MultiSelectChips } from './shared/MultiSelectChips';
-import { SingleSelect } from './shared/SingleSelect';
 import { FragmentAttributionEditor } from './lesson/FragmentAttributionEditor';
 import { TrashIcon } from '../lib/icons';
 import { createNewSource, createNewTheme, createNewReference } from '../lib/data';
@@ -278,17 +277,17 @@ export function LessonModal({
               />
             </label>
             <label className="cp-form-field cp-form-field-wide">
-              <span className="cp-form-label">Reference (optional)</span>
-              <SingleSelect
+              <span className="cp-form-label">References (optional)</span>
+              <MultiSelectChips
                 options={referencesAll.map((r) => ({
                   id: r.id,
                   label: r.title,
                   hint: r.author,
                 }))}
-                selectedId={form.referenceId}
-                onChange={(id) => patch('referenceId', id)}
+                selectedIds={form.referenceIds}
+                onChange={(ids) => patch('referenceIds', ids)}
                 onCreate={handleCreateReference}
-                placeholder="Pick a book, article…"
+                placeholder="Add books, articles, lectures…"
               />
             </label>
           </div>

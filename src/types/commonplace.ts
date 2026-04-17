@@ -68,7 +68,12 @@ export interface Lesson {
    */
   bodyAttributions?: UUID[][];
   themeIds: UUID[];
-  referenceId?: UUID;
+  /**
+   * References this lesson draws from. A single passage can cite multiple
+   * books/articles/conversations, so this is always an array (empty when
+   * the lesson isn't tied to any reference).
+   */
+  referenceIds: UUID[];
   reflection?: string;
   linkedLessonIds: UUID[];
   visibility: Visibility;

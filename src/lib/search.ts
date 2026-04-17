@@ -41,8 +41,8 @@ export function filterLessons(
     for (const id of l.themeIds) {
       if ((themeName.get(id) ?? '').includes(q)) return true;
     }
-    if (l.referenceId && (refTitle.get(l.referenceId) ?? '').includes(q)) {
-      return true;
+    for (const id of l.referenceIds) {
+      if ((refTitle.get(id) ?? '').includes(q)) return true;
     }
     return false;
   });

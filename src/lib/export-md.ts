@@ -100,9 +100,14 @@ function toReadableMarkdown(data: CommonplaceYear): string {
       out.push('');
       out.push(`Themes: ${themeNames.map((n) => `_${n}_`).join(', ')}`);
     }
-    if (l.referenceId) {
-      const r = refById.get(l.referenceId);
-      if (r) out.push(`From: _${r.title}_${r.author ? `, ${r.author}` : ''}`);
+    if (l.referenceIds.length > 0) {
+      const citations = l.referenceIds
+        .map((id) => refById.get(id))
+        .filter((r): r is NonNullable<typeof r> => !!r)
+        .map((r) => `_${r.title}_${r.author ? `, ${r.author}` : ''}`);
+      if (citations.length > 0) {
+        out.push(`From: ${citations.join(' · ')}`);
+      }
     }
     if (l.reflection) {
       out.push('');

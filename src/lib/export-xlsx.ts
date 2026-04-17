@@ -52,7 +52,10 @@ export function exportXlsx(
       .map((id) => themeById.get(id)?.name)
       .filter((n): n is string => !!n)
       .join(', '),
-    Reference: l.referenceId ? refById.get(l.referenceId)?.title ?? '' : '',
+    Reference: l.referenceIds
+      .map((id) => refById.get(id)?.title)
+      .filter((t): t is string => !!t)
+      .join(' / '),
     Original: l.originalText ?? '',
     Language: l.originalLanguage ?? '',
     Body: l.body,
@@ -89,8 +92,8 @@ export function exportXlsx(
   // Sheet 4: References
   const refCount = new Map<string, number>();
   for (const l of data.lessons) {
-    if (l.referenceId) {
-      refCount.set(l.referenceId, (refCount.get(l.referenceId) ?? 0) + 1);
+    for (const id of l.referenceIds) {
+      refCount.set(id, (refCount.get(id) ?? 0) + 1);
     }
   }
   const refRows = data.references.map((r) => ({

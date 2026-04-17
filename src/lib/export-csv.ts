@@ -64,9 +64,10 @@ export function exportCsv(
       .map((id) => themeById.get(id)?.name)
       .filter((n): n is string => !!n)
       .join(', ');
-    const refTitle = l.referenceId
-      ? refById.get(l.referenceId)?.title ?? ''
-      : '';
+    const refTitle = l.referenceIds
+      .map((id) => refById.get(id)?.title)
+      .filter((t): t is string => !!t)
+      .join(' / ');
     const linked = l.linkedLessonIds
       .map((id) => numberById.get(id))
       .filter((n): n is string => !!n)

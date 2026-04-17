@@ -303,9 +303,10 @@ function App() {
         const next: CommonplaceYear = {
           ...prev,
           references: prev.references.filter((r) => r.id !== refId),
-          lessons: prev.lessons.map((l) =>
-            l.referenceId === refId ? { ...l, referenceId: undefined } : l,
-          ),
+          lessons: prev.lessons.map((l) => ({
+            ...l,
+            referenceIds: l.referenceIds.filter((id) => id !== refId),
+          })),
           updatedAt: new Date().toISOString(),
         };
         persist(next);
@@ -508,7 +509,7 @@ function App() {
   const sourceCitationCount = (sourceId: string): number =>
     data.lessons.filter((l) => l.sourceIds.includes(sourceId)).length;
   const refCitationCount = (refId: string): number =>
-    data.lessons.filter((l) => l.referenceId === refId).length;
+    data.lessons.filter((l) => l.referenceIds.includes(refId)).length;
   const themeCitationCount = (themeId: string): number =>
     data.lessons.filter((l) => l.themeIds.includes(themeId)).length;
 

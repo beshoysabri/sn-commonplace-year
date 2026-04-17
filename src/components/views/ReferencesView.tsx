@@ -38,9 +38,10 @@ export function ReferencesView({
   const lessonsByReference = useMemo(() => {
     const m = new Map<string, Lesson[]>();
     for (const l of data.lessons) {
-      if (!l.referenceId) continue;
-      if (!m.has(l.referenceId)) m.set(l.referenceId, []);
-      m.get(l.referenceId)!.push(l);
+      for (const refId of l.referenceIds) {
+        if (!m.has(refId)) m.set(refId, []);
+        m.get(refId)!.push(l);
+      }
     }
     return m;
   }, [data.lessons]);

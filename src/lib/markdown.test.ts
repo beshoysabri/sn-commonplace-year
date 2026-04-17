@@ -25,7 +25,7 @@ interface NormalizedLesson {
   sourceNames: string[];
   themeNames: string[];
   linkedLessonNumbers: string[];
-  referenceTitle?: string;
+  referenceTitles: string[];
   bodyAttributionNames?: string[][];
 }
 
@@ -50,16 +50,15 @@ function normalize(y: CommonplaceYear) {
       linkedLessonNumbers: l.linkedLessonIds
         .map((id) => lessonNumberById.get(id))
         .filter((x): x is string => !!x),
+      referenceTitles: l.referenceIds
+        .map((id) => refById.get(id)?.title)
+        .filter((x): x is string => !!x),
     };
     if (l.title) n.title = l.title;
     if (l.originalText) n.originalText = l.originalText;
     if (l.originalLanguage) n.originalLanguage = l.originalLanguage;
     if (l.date) n.date = l.date;
     if (l.reflection) n.reflection = l.reflection;
-    if (l.referenceId) {
-      const t = refById.get(l.referenceId)?.title;
-      if (t) n.referenceTitle = t;
-    }
     if (l.bodyAttributions) {
       n.bodyAttributionNames = l.bodyAttributions.map((ids) =>
         ids
@@ -184,12 +183,81 @@ describe('markdown round-trip', () => {
     const md = serializeMarkdown(original);
     const reparsed = parseMarkdown(md);
     const l3 = reparsed.lessons.find((l) => l.number === '23#3')!;
-    expect(l3.referenceId).toBeDefined();
-    const ref = reparsed.references.find((r) => r.id === l3.referenceId)!;
+    expect(l3.referenceIds).toHaveLength(1);
+    const ref = reparsed.references.find((r) => r.id === l3.referenceIds[0])!;
     expect(ref.title).toBe('The Road Less Traveled');
     expect(ref.author).toBe('M. Scott Peck');
     expect(ref.status).toBe('read');
     expect(ref.rating).toBe(4);
+  });
+
+  it('round-trip preserves multiple references per lesson', () => {
+    const original = createSampleYear(2023);
+    const firstRefId = original.references[0].id;
+    const newRef = {
+      id: '00000000-0000-0000-0000-00000000AAAA',
+      title: 'Man’s Search for Meaning',
+      author: 'Viktor Frankl',
+      kind: 'book' as const,
+      year: 1946,
+      createdAt: '2023-01-01T00:00:00.000Z',
+      updatedAt: '2023-01-01T00:00:00.000Z',
+    };
+    original.references.push(newRef);
+    // Attach both references to 23#3.
+    original.lessons = original.lessons.map((l) =>
+      l.number === '23#3' ? { ...l, referenceIds: [firstRefId, newRef.id] } : l,
+    );
+    const md = serializeMarkdown(original);
+    expect(md).toContain('@references:');
+    const reparsed = parseMarkdown(md);
+    const l3 = reparsed.lessons.find((l) => l.number === '23#3')!;
+    expect(l3.referenceIds).toHaveLength(2);
+    const titles = l3.referenceIds
+      .map((id) => reparsed.references.find((r) => r.id === id)?.title)
+      .sort();
+    expect(titles).toEqual([
+      'Man’s Search for Meaning',
+      'The Road Less Traveled',
+    ]);
+  });
+
+  it('legacy @reference: (single) form still parses', () => {
+    const raw = [
+      '@commonplace: year',
+      '@version: 1',
+      '@year: 2023',
+      '@numberFormat: YY#N',
+      '@defaultView: book',
+      '@paperMode: no',
+      '@showNumbersInBookView: yes',
+      '@autoNumber: yes',
+      '',
+      '---',
+      '',
+      '---',
+      '',
+      '---',
+      '',
+      '@reference: Meditations [author:Marcus Aurelius] [kind:book]',
+      '',
+      '---',
+      '',
+      '@lesson: 23#1',
+      '  @important: no',
+      '  @sources:',
+      '  @themes:',
+      '  @reference: Meditations',
+      '  @visibility: private',
+      '  @body:',
+      '    Body.',
+    ].join('\n');
+    const parsed = parseMarkdown(raw);
+    const l1 = parsed.lessons[0];
+    expect(l1.referenceIds).toHaveLength(1);
+    expect(parsed.references.find((r) => r.id === l1.referenceIds[0])?.title).toBe(
+      'Meditations',
+    );
   });
 
   it('round-trip preserves theme-of-the-year and summary', () => {
@@ -468,6 +536,7 @@ describe('linked lessons', () => {
       important: false,
       sourceIds: [],
       themeIds: [],
+      referenceIds: [],
       linkedLessonIds: [],
       visibility: 'private',
       createdAt: '2023-01-01T00:00:00.000Z',
@@ -480,6 +549,7 @@ describe('linked lessons', () => {
       important: false,
       sourceIds: [],
       themeIds: [],
+      referenceIds: [],
       linkedLessonIds: [l1.id],
       visibility: 'private',
       createdAt: '2023-01-02T00:00:00.000Z',

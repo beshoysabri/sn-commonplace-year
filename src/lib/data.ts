@@ -47,6 +47,7 @@ export function createNewLesson(
     important: false,
     sourceIds: [],
     themeIds: [],
+    referenceIds: [],
     linkedLessonIds: [],
     visibility: 'private' as Visibility,
     createdAt: now,
@@ -190,7 +191,7 @@ export function createSampleYear(year = 2023): CommonplaceYear {
       important: true,
       sourceIds: [jung.id],
       themeIds: [methodTheme.id, egoTheme.id],
-      referenceId: roadLessTraveled.id,
+      referenceIds: [roadLessTraveled.id],
       body: '"An ancient adept has said: \'If the wrong man uses the right means, the right means work in the wrong way.\' This Chinese saying, unfortunately only too true, stands in sharp contrast to our belief in the \'right\' method irrespective of the man who applies it. In reality, everything depends on the man and little or nothing on the method."',
     }),
     createNewLesson('23#4', {

@@ -82,6 +82,7 @@ describe('densestWeek', () => {
       important: false,
       sourceIds: [],
       themeIds: [],
+      referenceIds: [],
       linkedLessonIds: [],
       visibility: 'private',
       createdAt: '',

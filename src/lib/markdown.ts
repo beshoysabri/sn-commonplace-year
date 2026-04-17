@@ -434,7 +434,7 @@ interface LessonAcc {
   sourceNames: string[];
   themeNames: string[];
   bodySourceNames?: string[][];
-  referenceName?: string;
+  referenceNames: string[];
   originalText?: string;
   originalLanguage?: string;
   date?: string;
@@ -452,6 +452,7 @@ function emptyAcc(number: string): LessonAcc {
     number,
     sourceNames: [],
     themeNames: [],
+    referenceNames: [],
     linkedLessonNumbers: [],
     body: '',
   };
@@ -463,6 +464,7 @@ type LessonField =
   | 'sources'
   | 'themes'
   | 'reference'
+  | 'references'
   | 'original'
   | 'originalLanguage'
   | 'date'
@@ -492,6 +494,14 @@ function parseLessonsSection(lines: string[]): LessonAcc[] {
       // Empty lines = no per-fragment attribution for that fragment.
       const lines = text.split('\n');
       current.bodySourceNames = lines.map((l) => parseList(l));
+    } else if (multilineField === 'references') {
+      // One reference title per line (titles may contain commas, so we
+      // don't split on commas the way @sources / @themes do).
+      const lines = text
+        .split('\n')
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0);
+      for (const line of lines) current.referenceNames.push(line);
     }
     multilineField = null;
     multilineBuffer = [];
@@ -552,7 +562,17 @@ function parseLessonsSection(lines: string[]): LessonAcc[] {
         current.themeNames = parseList(rest);
         break;
       case 'reference':
-        current.referenceName = rest.trim() || undefined;
+        // Legacy single-value form (pre-v0.2). Still accepted on parse.
+        if (rest.trim()) current.referenceNames.push(rest.trim());
+        break;
+      case 'references':
+        if (rest.trim()) {
+          // Inline single title (keeps short lessons terse).
+          current.referenceNames.push(rest.trim());
+        } else {
+          multilineField = 'references';
+          multilineBuffer = [];
+        }
         break;
       case 'original':
         current.originalText = rest.trim() || undefined;
@@ -673,23 +693,20 @@ function resolveLessonRefs(
       return t.id;
     });
 
-    let referenceId: string | undefined;
-    if (a.referenceName) {
-      const r = refByTitle.get(a.referenceName);
-      if (r) referenceId = r.id;
-      else {
-        const newRef: Reference = {
-          id: uuid(),
-          title: a.referenceName,
-          kind: 'book',
-          createdAt: nowIso(),
-          updatedAt: nowIso(),
-        };
-        references.push(newRef);
-        refByTitle.set(a.referenceName, newRef);
-        referenceId = newRef.id;
-      }
-    }
+    const referenceIds: UUID[] = a.referenceNames.map((title) => {
+      const existing = refByTitle.get(title);
+      if (existing) return existing.id;
+      const newRef: Reference = {
+        id: uuid(),
+        title,
+        kind: 'book',
+        createdAt: nowIso(),
+        updatedAt: nowIso(),
+      };
+      references.push(newRef);
+      refByTitle.set(title, newRef);
+      return newRef.id;
+    });
 
     const linkedLessonIds = a.linkedLessonNumbers
       .map((n) => numberToId.get(n))
@@ -705,6 +722,7 @@ function resolveLessonRefs(
       important: a.important ?? false,
       sourceIds,
       themeIds,
+      referenceIds,
       linkedLessonIds,
       visibility: a.visibility ?? 'private',
       createdAt,
@@ -715,7 +733,6 @@ function resolveLessonRefs(
     if (a.originalText) lesson.originalText = a.originalText;
     if (a.originalLanguage) lesson.originalLanguage = a.originalLanguage;
     if (a.reflection) lesson.reflection = a.reflection;
-    if (referenceId) lesson.referenceId = referenceId;
     if (bodyAttributions) lesson.bodyAttributions = bodyAttributions;
 
     return lesson;
@@ -890,9 +907,16 @@ export function serializeMarkdown(data: CommonplaceYear): string {
       .map((id) => themeById.get(id)?.name)
       .filter((n): n is string => !!n);
     out.push(`${FIELD_INDENT}@themes: ${themeNames.join(', ')}`);
-    if (l.referenceId) {
-      const refTitle = refById.get(l.referenceId)?.title;
-      if (refTitle) out.push(`${FIELD_INDENT}@reference: ${refTitle}`);
+    if (l.referenceIds.length > 0) {
+      const titles = l.referenceIds
+        .map((id) => refById.get(id)?.title)
+        .filter((t): t is string => !!t);
+      if (titles.length === 1) {
+        out.push(`${FIELD_INDENT}@references: ${titles[0]}`);
+      } else if (titles.length > 1) {
+        out.push(`${FIELD_INDENT}@references:`);
+        for (const t of titles) out.push(`${BODY_INDENT}${t}`);
+      }
     }
     if (l.originalText) {
       out.push(`${FIELD_INDENT}@original: ${l.originalText}`);

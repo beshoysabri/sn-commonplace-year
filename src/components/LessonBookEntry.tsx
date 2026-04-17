@@ -38,9 +38,9 @@ export const LessonBookEntry = forwardRef<HTMLElement, LessonBookEntryProps>(
       .map((id) => data.themes.find((t) => t.id === id))
       .filter((t): t is NonNullable<typeof t> => !!t);
 
-    const reference = lesson.referenceId
-      ? data.references.find((r) => r.id === lesson.referenceId)
-      : undefined;
+    const references = lesson.referenceIds
+      .map((id) => data.references.find((r) => r.id === id))
+      .filter((r): r is NonNullable<typeof r> => !!r);
 
     const fragmentPairs = fragmentsWithAttributions(lesson, data);
     const hasPerFragment = hasPerFragmentAttribution(lesson);
@@ -130,10 +130,19 @@ export const LessonBookEntry = forwardRef<HTMLElement, LessonBookEntryProps>(
               ))}
             </span>
           )}
-          {reference && (
+          {references.length > 0 && (
             <span className="cp-book-reference">
-              from <em>{reference.title}</em>
-              {reference.author && <span>, {reference.author}</span>}
+              from{' '}
+              {references.reduce<React.ReactNode[]>((acc, r, i) => {
+                if (i > 0) acc.push(<span key={`sep-${i}`}> · </span>);
+                acc.push(
+                  <span key={r.id}>
+                    <em>{r.title}</em>
+                    {r.author && <span>, {r.author}</span>}
+                  </span>,
+                );
+                return acc;
+              }, [])}
             </span>
           )}
           {sources.length > 0 && !hasPerFragment && (
