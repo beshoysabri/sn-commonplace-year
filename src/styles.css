@@ -714,6 +714,64 @@ body.sn-embedded {
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  position: relative;
+}
+
+.cp-chapter-edit {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--cp-muted);
+  background: var(--cp-bg);
+  border: 1px solid var(--cp-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--cp-transition);
+  opacity: 0.6;
+}
+.cp-chapter-edit:hover {
+  opacity: 1;
+  color: var(--cp-fg);
+  border-color: var(--cp-accent);
+  background: var(--cp-surface);
+}
+.cp-chapter-opener:hover .cp-chapter-edit {
+  opacity: 1;
+}
+@media (max-width: 560px) {
+  .cp-chapter-edit {
+    right: 0;
+    top: 0;
+    padding: 4px 8px;
+    font-size: 0.6875rem;
+  }
+}
+
+.cp-chapter-placeholder-btn {
+  background: transparent;
+  border: 1px dashed var(--cp-border);
+  border-radius: var(--cp-radius-sm);
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all var(--cp-transition);
+  color: var(--cp-muted);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+  max-width: 480px;
+}
+.cp-chapter-placeholder-btn:hover {
+  border-color: var(--cp-accent);
+  color: var(--cp-fg);
+  background: var(--cp-surface);
 }
 
 .cp-chapter-year {

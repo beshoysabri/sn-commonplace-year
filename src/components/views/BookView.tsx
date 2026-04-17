@@ -9,6 +9,7 @@ interface BookViewProps {
   data: CommonplaceYear;
   onChange: (next: CommonplaceYear) => void;
   onOpenLesson: (lesson: Lesson) => void;
+  onEditYear?: () => void;
   paperMode: boolean;
   showImportantOnly: boolean;
   searchQuery?: string;
@@ -18,6 +19,7 @@ export function BookView({
   data,
   onChange,
   onOpenLesson,
+  onEditYear,
   paperMode,
   showImportantOnly,
   searchQuery = '',
@@ -117,7 +119,7 @@ export function BookView({
       ref={wrapRef}
     >
       <div className="cp-book-column">
-        <ChapterOpener data={data} />
+        <ChapterOpener data={data} onEdit={onEditYear} />
 
         {lessons.length === 0 && (
           <EmptyState
