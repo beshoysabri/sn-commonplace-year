@@ -38,6 +38,7 @@ import { ThemeModal } from './components/ThemeModal';
 import { OnThisDayBanner } from './components/OnThisDayBanner';
 import { onThisDayLessons } from './lib/calendar';
 import { ExportDialog } from './components/ExportDialog';
+import { ImportDialog } from './components/ImportDialog';
 import { YearSummaryModal } from './components/YearSummaryModal';
 
 const INSIDE_SN =
@@ -79,6 +80,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [showExport, setShowExport] = useState(false);
+  const [showImport, setShowImport] = useState(false);
   const [showYearSummary, setShowYearSummary] = useState(false);
   const [otdDismissed, setOtdDismissed] = useState(false);
 
@@ -379,6 +381,11 @@ function App() {
           e.preventDefault();
           return;
         }
+        if (showImport) {
+          setShowImport(false);
+          e.preventDefault();
+          return;
+        }
         if (showYearSummary) {
           setShowYearSummary(false);
           e.preventDefault();
@@ -411,7 +418,7 @@ function App() {
         }
       }
       if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
-      if (anyModalOpen || showExport || showYearSummary) return;
+      if (anyModalOpen || showExport || showImport || showYearSummary) return;
 
       switch (e.key) {
         case '/':
@@ -489,6 +496,7 @@ function App() {
   }, [
     showShortcuts,
     showExport,
+    showImport,
     showYearSummary,
     editingLesson,
     editingSource,
@@ -534,6 +542,7 @@ function App() {
         paperMode={paperMode}
         onTogglePaperMode={togglePaperMode}
         onNewLesson={openNewLesson}
+        onShowImport={() => setShowImport(true)}
         onShowExport={() => setShowExport(true)}
         onShowShortcuts={() => setShowShortcuts(true)}
         searchRef={searchInputRef}
@@ -622,6 +631,13 @@ function App() {
       )}
       {showExport && (
         <ExportDialog data={data} onClose={() => setShowExport(false)} />
+      )}
+      {showImport && (
+        <ImportDialog
+          data={data}
+          onApply={(next) => handleChange(next)}
+          onClose={() => setShowImport(false)}
+        />
       )}
       {showYearSummary && (
         <YearSummaryModal

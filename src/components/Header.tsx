@@ -11,6 +11,7 @@ import {
   StarOutlineIcon,
   StarFilledIcon,
   TagIcon,
+  UploadIcon,
   UserSilhouetteIcon,
   InfoIcon,
   BookmarkIcon,
@@ -29,6 +30,7 @@ interface HeaderProps {
   paperMode: boolean;
   onTogglePaperMode: () => void;
   onNewLesson: () => void;
+  onShowImport: () => void;
   onShowExport: () => void;
   onShowShortcuts: () => void;
   searchRef?: React.Ref<HTMLInputElement>;
@@ -74,6 +76,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
     paperMode,
     onTogglePaperMode,
     onNewLesson,
+    onShowImport,
     onShowExport,
     onShowShortcuts,
     searchRef,
@@ -153,6 +156,14 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
           aria-pressed={paperMode}
         >
           <BookOpenIcon size={14} />
+        </button>
+        <button
+          type="button"
+          className="cp-btn cp-btn-ghost cp-btn-icon"
+          onClick={onShowImport}
+          title="Import"
+        >
+          <UploadIcon size={14} />
         </button>
         <button
           type="button"

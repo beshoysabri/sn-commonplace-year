@@ -2628,6 +2628,86 @@ body.sn-embedded {
   border: 1px solid var(--cp-border);
 }
 
+/* =============================================================
+ * Import dialog
+ * ============================================================= */
+.cp-textarea-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  min-height: 220px;
+}
+.cp-import-preview {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cp-import-preview-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: baseline;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--cp-muted);
+}
+.cp-import-meta strong {
+  color: var(--cp-fg);
+  font-weight: 600;
+}
+.cp-import-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--cp-fg);
+}
+.cp-import-stats strong {
+  color: var(--cp-accent);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.cp-import-warnings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cp-import-warnings li {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--cp-warning);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cp-import-numbers summary {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--cp-muted);
+  cursor: pointer;
+  user-select: none;
+}
+.cp-import-numbers code {
+  display: block;
+  margin-top: 6px;
+  padding: 8px 10px;
+  background: var(--cp-bg);
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--cp-fg);
+  word-break: break-word;
+}
+
 /* Small hint text under form fields. */
 .cp-form-hint {
   font-family: var(--font-sans);

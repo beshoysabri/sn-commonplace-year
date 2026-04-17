@@ -168,6 +168,16 @@ export const DownloadIcon = (p: IconProps) =>
     </>,
   );
 
+export const UploadIcon = (p: IconProps) =>
+  svg(
+    p,
+    <>
+      <line x1="8" y1="11" x2="8" y2="3" />
+      <polyline points="4,6 8,2 12,6" />
+      <line x1="2" y1="14" x2="14" y2="14" />
+    </>,
+  );
+
 export const TrashIcon = (p: IconProps) =>
   svg(
     p,
