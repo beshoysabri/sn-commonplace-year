@@ -259,7 +259,7 @@ export function ListView({
                   >
                     <LessonNumberBadge number={l.number} />
                     <div className="cp-list-title">
-                      {l.title ?? truncate(l.body, 80)}
+                      {l.title ?? l.body.replace(/\s+/g, ' ').trim()}
                     </div>
                     <div className="cp-list-meta">
                       {l.date && <DatePill date={l.date} />}
@@ -286,11 +286,6 @@ export function ListView({
       )}
     </div>
   );
-}
-
-function truncate(s: string, n: number): string {
-  const flat = s.replace(/\s+/g, ' ').trim();
-  return flat.length > n ? flat.slice(0, n - 1) + '…' : flat;
 }
 
 function compareLessonNumbers(a: string, b: string): number {
