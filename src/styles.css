@@ -70,16 +70,18 @@
 
 /* Paper mode — candle-lit variant: leather-bound book seen by firelight.
  * Applied on top of .cp-paper-mode when SN's active theme is dark (decided
- * by App.tsx from the injected --sn-stylekit-background-color luminance). */
+ * by App.tsx from the injected --sn-stylekit-background-color luminance).
+ * Contrast is deliberately a step higher than the light variant: on a
+ * dark parchment, muted tokens have to work harder to stay legible. */
 .cp-paper-mode.cp-paper-mode-dark {
   --cp-bg: #1C1814;
-  --cp-fg: #E8DCC6;
-  --cp-surface: #24201B;
-  --cp-surface-hover: #2C2822;
-  --cp-border: rgba(232, 220, 198, 0.15);
-  --cp-muted: rgba(232, 220, 198, 0.58);
-  --cp-blockquote-rule: #C19A3E;
-  --cp-margin-rule: rgba(193, 154, 62, 0.3);
+  --cp-fg: #F2E8D1;
+  --cp-surface: #2A2620;
+  --cp-surface-hover: #34302A;
+  --cp-border: rgba(242, 232, 209, 0.24);
+  --cp-muted: rgba(242, 232, 209, 0.78);
+  --cp-blockquote-rule: #D4A574;
+  --cp-margin-rule: rgba(212, 165, 116, 0.45);
 }
 
 /* -------- Base -------- */
