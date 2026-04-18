@@ -1,7 +1,7 @@
 {
   "name": "sn-commonplace-year",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "A commonplace book editor for Standard Notes — one year per note. A living chapter in the user's intellectual autobiography.",
   "repository": {
