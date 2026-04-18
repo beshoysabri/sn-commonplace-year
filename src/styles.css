@@ -53,27 +53,41 @@
   --cp-lesson-gutter: 48px;
 }
 
-/* Dark-mode fallbacks for standalone / when SN doesn't inject themed vars.
- * When SN IS active, its --sn-stylekit-* values override these fallbacks,
- * so the plugin still tracks the active SN theme. */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --cp-bg: var(--sn-stylekit-background-color, #19191c);
-    --cp-fg: var(--sn-stylekit-foreground-color, #e6e6e6);
-    --cp-surface: var(--sn-stylekit-contrast-background-color, #222226);
-    --cp-surface-hover: var(--sn-stylekit-secondary-background-color, #2a2a2e);
-    --cp-border: var(--sn-stylekit-border-color, #333338);
-    --cp-muted: var(--sn-stylekit-secondary-foreground-color, #8b8b93);
-  }
+/* Dark-mode fallbacks. The theme-bridge in `lib/theme-bridge.ts` stamps
+ * `data-sn-theme="dark"` on <html> whenever either (a) SN's injected
+ * --sn-stylekit-theme-type is "dark", or (b) we're standalone and the OS
+ * prefers dark. SN's own --sn-stylekit-* values still win via the var()
+ * chain — the hex fallbacks only show through when SN hasn't injected a
+ * value for that particular slot. */
+:root[data-sn-theme='dark'] {
+  --cp-bg: var(--sn-stylekit-background-color, #19191c);
+  --cp-fg: var(--sn-stylekit-foreground-color, #e6e6e6);
+  --cp-surface: var(--sn-stylekit-contrast-background-color, #222226);
+  --cp-surface-hover: var(--sn-stylekit-secondary-background-color, #2a2a2e);
+  --cp-border: var(--sn-stylekit-border-color, #333338);
+  --cp-muted: var(--sn-stylekit-secondary-foreground-color, #8b8b93);
 }
 
-/* Paper mode: opt-in warm reading surface for Book view */
+/* Paper mode (light): warm parchment reading surface. */
 .cp-paper-mode {
   --cp-bg: var(--cp-paper);
   --cp-fg: var(--cp-ink);
   --cp-surface: #F5F0E4;
   --cp-border: rgba(43, 39, 36, 0.15);
   --cp-muted: rgba(43, 39, 36, 0.55);
+}
+
+/* Paper mode (dark): a candle-lit leather-bound variant so Paper Mode keeps
+ * the warm-reading feel whether SN is on a light or dark theme. */
+:root[data-sn-theme='dark'] .cp-paper-mode {
+  --cp-bg: #1C1814;
+  --cp-fg: #E8DCC6;
+  --cp-surface: #24201B;
+  --cp-surface-hover: #2C2822;
+  --cp-border: rgba(232, 220, 198, 0.15);
+  --cp-muted: rgba(232, 220, 198, 0.58);
+  --cp-blockquote-rule: #C19A3E;
+  --cp-margin-rule: rgba(193, 154, 62, 0.3);
 }
 
 /* -------- Base -------- */
