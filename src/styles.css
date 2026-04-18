@@ -106,6 +106,36 @@ body.sn-embedded {
 }
 
 /* =============================================================
+ * Scrollbars — themed to SN (or the plugin's own border/muted
+ * tokens when standalone). Wider + rounded, matching the shape
+ * of SN's native panel scrollbars so our right-pane views feel
+ * of a piece with the left drawer.
+ * ============================================================= */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sn-stylekit-scrollbar-thumb-color, var(--cp-border)) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--sn-stylekit-scrollbar-thumb-color, var(--cp-border));
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cp-muted);
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* =============================================================
  * Buttons
  * ============================================================= */
 .cp-btn {

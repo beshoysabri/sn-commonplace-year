@@ -1,5 +1,6 @@
-// Muted, jewel-toned palette suited to a commonplace-book aesthetic.
-// Each color works against both light and dark SN themes.
+// Shared 18-color palette used across the sn-* plugin family (kanban,
+// habit, goal, commonplace). Grouped by hue so the swatch grid reads
+// as a rainbow — each color works against both light and dark SN themes.
 
 export interface PaletteColor {
   name: string;
@@ -7,23 +8,36 @@ export interface PaletteColor {
 }
 
 export const PALETTE: readonly PaletteColor[] = [
-  { name: 'Ocean', hex: '#4C6B8A' },
-  { name: 'Indigo', hex: '#7C3AED' },
-  { name: 'Wine', hex: '#9B2335' },
-  { name: 'Rose', hex: '#E5879A' },
-  { name: 'Amber', hex: '#C19A3E' },
-  { name: 'Olive', hex: '#6B8E23' },
-  { name: 'Moss', hex: '#2E7D32' },
-  { name: 'Teal', hex: '#3E8E8E' },
-  { name: 'Slate', hex: '#5C6B73' },
-  { name: 'Rust', hex: '#B85B3A' },
-  { name: 'Parchment', hex: '#D4A574' },
-  { name: 'Ink', hex: '#2B2724' },
+  // Yellows
+  { name: 'Lemon', hex: '#FFF689' },
+  { name: 'Mustard', hex: '#F4D35E' },
+  // Oranges
+  { name: 'Peach', hex: '#FFB88A' },
+  { name: 'Tangerine', hex: '#FF9C5B' },
+  { name: 'Flame', hex: '#F67B45' },
+  // Pinks/Reds
+  { name: 'Blush', hex: '#FBC2C2' },
+  { name: 'Rose', hex: '#E39B99' },
+  { name: 'Berry', hex: '#CB7876' },
+  // Greens
+  { name: 'Sage', hex: '#B4CFA4' },
+  { name: 'Fern', hex: '#8BA47C' },
+  { name: 'Forest', hex: '#62866C' },
+  // Blues
+  { name: 'Sky', hex: '#A0C5E3' },
+  { name: 'Steel', hex: '#81B2D9' },
+  { name: 'Ocean', hex: '#32769B' },
+  // Purples
+  { name: 'Lavender', hex: '#BBA6DD' },
+  { name: 'Mauve', hex: '#8C7DA8' },
+  { name: 'Plum', hex: '#64557B' },
+  // Dark
+  { name: 'Midnight', hex: '#1E2136' },
 ] as const;
 
-export const DEFAULT_SOURCE_COLOR = '#4C6B8A';
-export const DEFAULT_THEME_COLOR = '#6B8E23';
-export const DEFAULT_REFERENCE_COLOR = '#5C6B73';
+export const DEFAULT_SOURCE_COLOR = '#32769B'; // Ocean
+export const DEFAULT_THEME_COLOR = '#62866C'; // Forest
+export const DEFAULT_REFERENCE_COLOR = '#64557B'; // Plum
 
 /**
  * Deterministic color picker from a string (e.g. source name) — used as
