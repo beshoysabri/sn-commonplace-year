@@ -7,8 +7,6 @@
  * causing all saves to queue and never persist.
  */
 
-import { refreshSnThemeType } from './theme-bridge';
-
 type ContentCallback = (text: string) => void;
 type ReplyCallback = (data: unknown) => void;
 
@@ -285,27 +283,13 @@ class SNExtensionAPI {
 
   private activateThemes(urls: string[]) {
     document.querySelectorAll('link[data-sn-theme]').forEach((el) => el.remove());
-    const pending: Promise<void>[] = [];
     for (const url of urls) {
       if (!url) continue;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = url;
       link.setAttribute('data-sn-theme', 'true');
-      pending.push(
-        new Promise((resolve) => {
-          link.addEventListener('load', () => resolve());
-          link.addEventListener('error', () => resolve());
-        }),
-      );
       document.head.appendChild(link);
-    }
-    // Pick up --sn-stylekit-theme-type once SN's sheets are parsed, so our
-    // [data-sn-theme="dark"] rules mirror SN's theme exactly.
-    if (pending.length === 0) {
-      refreshSnThemeType();
-    } else {
-      Promise.all(pending).then(() => refreshSnThemeType());
     }
   }
 
