@@ -68,6 +68,20 @@
   --cp-muted: rgba(43, 39, 36, 0.55);
 }
 
+/* Paper mode — candle-lit variant: leather-bound book seen by firelight.
+ * Applied on top of .cp-paper-mode when SN's active theme is dark (decided
+ * by App.tsx from the injected --sn-stylekit-background-color luminance). */
+.cp-paper-mode.cp-paper-mode-dark {
+  --cp-bg: #1C1814;
+  --cp-fg: #E8DCC6;
+  --cp-surface: #24201B;
+  --cp-surface-hover: #2C2822;
+  --cp-border: rgba(232, 220, 198, 0.15);
+  --cp-muted: rgba(232, 220, 198, 0.58);
+  --cp-blockquote-rule: #C19A3E;
+  --cp-margin-rule: rgba(193, 154, 62, 0.3);
+}
+
 /* -------- Base -------- */
 *, *::before, *::after { box-sizing: border-box; }
 

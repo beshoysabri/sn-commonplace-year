@@ -40,6 +40,10 @@ import { onThisDayLessons } from './lib/calendar';
 import { ExportDialog } from './components/ExportDialog';
 import { ImportDialog } from './components/ImportDialog';
 import { YearSummaryModal } from './components/YearSummaryModal';
+import {
+  readSnThemeIsDark,
+  SN_THEME_CHANGED_EVENT,
+} from './lib/theme-luminance';
 
 const INSIDE_SN =
   typeof window !== 'undefined' && window.parent !== window;
@@ -102,6 +106,18 @@ function App() {
   } | null>(null);
 
   const paperMode = data.settings.paperMode;
+
+  // Pick the Paper Mode parchment variant from SN's injected background —
+  // warm cream when SN is light, candle-lit leather when SN is dark. Only
+  // read when Paper Mode is actually on, and re-read when SN swaps themes.
+  const [snThemeIsDark, setSnThemeIsDark] = useState<boolean>(false);
+  useEffect(() => {
+    if (!paperMode) return;
+    const sync = () => setSnThemeIsDark(readSnThemeIsDark());
+    sync();
+    window.addEventListener(SN_THEME_CHANGED_EVENT, sync);
+    return () => window.removeEventListener(SN_THEME_CHANGED_EVENT, sync);
+  }, [paperMode]);
 
   const dataReceived = useRef(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -528,7 +544,15 @@ function App() {
     data.lessons.filter((l) => l.themeIds.includes(themeId)).length;
 
   return (
-    <div className={`app ${paperMode ? 'cp-paper-mode' : ''}`}>
+    <div
+      className={`app ${
+        paperMode
+          ? snThemeIsDark
+            ? 'cp-paper-mode cp-paper-mode-dark'
+            : 'cp-paper-mode'
+          : ''
+      }`}
+    >
       <Header
         year={data.year}
         themeLabel={data.theme}

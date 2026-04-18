@@ -283,13 +283,27 @@ class SNExtensionAPI {
 
   private activateThemes(urls: string[]) {
     document.querySelectorAll('link[data-sn-theme]').forEach((el) => el.remove());
+    const pending: Promise<void>[] = [];
     for (const url of urls) {
       if (!url) continue;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = url;
       link.setAttribute('data-sn-theme', 'true');
+      pending.push(
+        new Promise<void>((resolve) => {
+          link.addEventListener('load', () => resolve());
+          link.addEventListener('error', () => resolve());
+        }),
+      );
       document.head.appendChild(link);
+    }
+    const notify = () =>
+      window.dispatchEvent(new CustomEvent('sn-theme-changed'));
+    if (pending.length === 0) {
+      notify();
+    } else {
+      Promise.all(pending).then(notify);
     }
   }
 
