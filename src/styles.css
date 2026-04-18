@@ -1132,8 +1132,6 @@ body.sn-embedded {
   overflow-y: auto;
   flex: 1;
   padding: 20px 24px 80px;
-  max-width: 1120px;
-  margin: 0 auto;
   width: 100%;
 }
 .cp-list-toolbar {
@@ -1925,8 +1923,6 @@ body.sn-embedded {
 .cp-references-view {
   overflow-y: auto;
   padding: 20px 24px 80px;
-  max-width: 1040px;
-  margin: 0 auto;
   width: 100%;
 }
 .cp-references-empty {
@@ -2067,8 +2063,6 @@ body.sn-embedded {
 .cp-themes-view {
   overflow-y: auto;
   padding: 28px 24px 80px;
-  max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
 }
 .cp-themes-empty {
@@ -2179,8 +2173,6 @@ body.sn-embedded {
 .cp-calendar-view {
   overflow-y: auto;
   padding: 20px 24px 80px;
-  max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
 }
 .cp-calendar-summary {
@@ -2462,8 +2454,6 @@ body.sn-embedded {
 .cp-insights-view {
   overflow-y: auto;
   padding: 20px 24px 80px;
-  max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
 }
 .cp-insights-empty {
@@ -2752,8 +2742,6 @@ body.sn-embedded {
 .cp-quotes-view {
   overflow-y: auto;
   padding: 20px 24px 80px;
-  max-width: 760px;
-  margin: 0 auto;
   width: 100%;
 }
 .cp-quotes-empty {
