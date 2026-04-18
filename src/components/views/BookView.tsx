@@ -10,7 +10,6 @@ interface BookViewProps {
   onChange: (next: CommonplaceYear) => void;
   onOpenLesson: (lesson: Lesson) => void;
   onEditYear?: () => void;
-  paperMode: boolean;
   showImportantOnly: boolean;
   searchQuery?: string;
 }
@@ -20,7 +19,6 @@ export function BookView({
   onChange,
   onOpenLesson,
   onEditYear,
-  paperMode,
   showImportantOnly,
   searchQuery = '',
 }: BookViewProps) {
@@ -114,10 +112,7 @@ export function BookView({
   }, [focusIndex, lessons, onOpenLesson, togglePriority]);
 
   return (
-    <div
-      className={`cp-book-view ${paperMode ? 'cp-paper-mode' : ''}`}
-      ref={wrapRef}
-    >
+    <div className="cp-book-view" ref={wrapRef}>
       <div className="cp-book-column">
         <ChapterOpener data={data} onEdit={onEditYear} />
 

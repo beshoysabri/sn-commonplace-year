@@ -586,7 +586,6 @@ function App() {
           onChange={handleChange}
           onOpenLesson={(l) => setEditingLesson({ lesson: l, isNew: false })}
           onEditYear={() => setShowYearSummary(true)}
-          paperMode={paperMode}
           showImportantOnly={showImportantOnly}
           searchQuery={searchQuery}
         />
