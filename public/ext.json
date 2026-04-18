@@ -3,7 +3,7 @@
   "name": "Commonplace Year",
   "content_type": "SN|Component",
   "area": "editor-editor",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A commonplace book editor for Standard Notes — one year per note. A living chapter in the user's intellectual autobiography.",
   "url": "https://beshoysabri.github.io/sn-commonplace-year/index.html",
   "download_url": "https://github.com/beshoysabri/sn-commonplace-year/releases/download/v0.1.0/sn-commonplace-year.zip",
