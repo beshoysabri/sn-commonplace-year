@@ -8,6 +8,7 @@ import {
   MenuIcon,
   PlusIcon,
   QuillIcon,
+  SearchIcon,
   StarOutlineIcon,
   StarFilledIcon,
   TagIcon,
@@ -34,6 +35,9 @@ interface HeaderProps {
   onShowExport: () => void;
   onShowShortcuts: () => void;
   searchRef?: React.Ref<HTMLInputElement>;
+  /** Narrow layouts tuck the search field behind a toggle; wide ones always show it. */
+  searchOpen: boolean;
+  onSearchOpenChange: (open: boolean) => void;
   /** Views that are actually implemented and clickable in this build. */
   enabledViews?: readonly ViewMode[];
 }
@@ -80,12 +84,31 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
     onShowExport,
     onShowShortcuts,
     searchRef,
+    searchOpen,
+    onSearchOpenChange,
     enabledViews = ALL_VIEWS,
   },
   ref,
 ) {
+  // A query keeps the field on screen even if the toggle was closed, so an
+  // active filter is never hidden.
+  const showSearch = searchOpen || searchQuery !== '';
+
+  const toggleSearch = () => {
+    if (showSearch) {
+      onSearchOpenChange(false);
+      if (searchQuery) onSearchChange('');
+      return;
+    }
+    onSearchOpenChange(true);
+    // The field is display:none until the open state renders.
+    requestAnimationFrame(() => {
+      if (searchRef && typeof searchRef === 'object') searchRef.current?.focus();
+    });
+  };
+
   return (
-    <header className="cp-header" ref={ref}>
+    <header className={`cp-header ${showSearch ? 'search-open' : ''}`} ref={ref}>
       <div className="cp-header-identity">
         <span className="cp-header-year">{year}</span>
         {themeLabel && (
@@ -108,6 +131,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
               onClick={() => enabled && onViewChange(v)}
               disabled={!enabled}
               title={`${meta.label} (${meta.shortcut})`}
+              aria-label={meta.label}
               aria-pressed={active}
             >
               <meta.Icon size={14} />
@@ -116,30 +140,42 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
           );
         })}
       </nav>
+      <div className="cp-header-search">
+        <SearchBar
+          ref={searchRef}
+          value={searchQuery}
+          onChange={onSearchChange}
+          placeholder="Search lessons…"
+        />
+      </div>
       <div className="cp-header-controls">
-        <div className="cp-header-search">
-          <SearchBar
-            ref={searchRef}
-            value={searchQuery}
-            onChange={onSearchChange}
-            placeholder="Search lessons…"
-          />
-        </div>
         <button
           type="button"
-          className="cp-btn cp-btn-primary cp-btn-icon"
-          onClick={onNewLesson}
-          title="New lesson (n)"
+          className={`cp-btn cp-btn-ghost cp-btn-icon cp-hdr-search-toggle ${showSearch ? 'active' : ''}`}
+          onClick={toggleSearch}
+          title={showSearch ? 'Close search' : 'Search (/)'}
+          aria-label={showSearch ? 'Close search' : 'Search'}
+          aria-expanded={showSearch}
         >
-          <PlusIcon size={14} /> Lesson
+          <SearchIcon size={16} />
         </button>
         <button
           type="button"
-          className={`cp-btn cp-btn-ghost cp-btn-icon ${showImportantOnly ? 'active' : ''}`}
+          className="cp-btn cp-btn-primary cp-btn-icon cp-hdr-new"
+          onClick={onNewLesson}
+          title="New lesson (n)"
+          aria-label="New lesson"
+        >
+          <PlusIcon size={14} /> <span className="cp-hdr-new-label">Lesson</span>
+        </button>
+        <button
+          type="button"
+          className={`cp-btn cp-btn-ghost cp-btn-icon cp-hdr-important ${showImportantOnly ? 'active' : ''}`}
           onClick={onToggleImportant}
           title={
             showImportantOnly ? 'Showing important only' : 'Show important only'
           }
+          aria-label="Important only"
           aria-pressed={showImportantOnly}
         >
           {showImportantOnly ? (
@@ -150,34 +186,38 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header(
         </button>
         <button
           type="button"
-          className={`cp-btn cp-btn-ghost cp-btn-icon ${paperMode ? 'active' : ''}`}
+          className={`cp-btn cp-btn-ghost cp-btn-icon cp-hdr-paper ${paperMode ? 'active' : ''}`}
           onClick={onTogglePaperMode}
           title={paperMode ? 'Paper mode on' : 'Paper mode'}
+          aria-label="Paper mode"
           aria-pressed={paperMode}
         >
           <BookOpenIcon size={14} />
         </button>
         <button
           type="button"
-          className="cp-btn cp-btn-ghost cp-btn-icon"
+          className="cp-btn cp-btn-ghost cp-btn-icon cp-hdr-import"
           onClick={onShowImport}
           title="Import"
+          aria-label="Import"
         >
           <UploadIcon size={14} />
         </button>
         <button
           type="button"
-          className="cp-btn cp-btn-ghost cp-btn-icon"
+          className="cp-btn cp-btn-ghost cp-btn-icon cp-hdr-export"
           onClick={onShowExport}
           title="Export"
+          aria-label="Export"
         >
           <DownloadIcon size={14} />
         </button>
         <button
           type="button"
-          className="cp-btn cp-btn-ghost cp-btn-icon"
+          className="cp-btn cp-btn-ghost cp-btn-icon cp-hdr-shortcuts"
           onClick={onShowShortcuts}
           title="Keyboard shortcuts"
+          aria-label="Keyboard shortcuts"
         >
           <KeyboardIcon size={14} />
         </button>

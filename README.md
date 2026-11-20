@@ -64,6 +64,13 @@ Three independent entity types, each with its own modal and color palette:
 
 All three support inline quick-create from within the LessonModal — no context switch to add a new voice.
 
+### On a Phone
+
+- A compact header: title and five 40px buttons on one row, the eight views as evenly spaced icon tabs, search behind a toggle
+- Every control is finger-sized on touch screens, and form fields are 16px so iOS never zooms the page when you tap one
+- Edit and other hover-only actions show without hover on touch screens
+- The book's serif, Source Serif 4, ships with the plugin for phones and computers that lack Iowan Old Style and Palatino (Android, Linux)
+
 ### Bullet-list Importer
 
 Paste an existing bullet-list commonplace into the import dialog and it parses straight into a year:
@@ -154,6 +161,7 @@ If today's month+day matches any lesson's date (year-agnostic), a subtle gold ba
 | [jsPDF](https://github.com/parallax/jsPDF) 3 + [jspdf-autotable](https://github.com/simonbengtsson/jsPDF-AutoTable) 5 | Typeset Book PDF export |
 | [xlsx](https://github.com/SheetJS/sheetjs) 0.18 | Excel export |
 | [uuid](https://github.com/uuidjs/uuid) 13 | ID generation |
+| [Source Serif 4](https://fonts.adobe.com/fonts/source-serif) via [Fontsource](https://fontsource.org/fonts/source-serif-4) | The book's serif where the system has none (SIL OFL 1.1) |
 | [Vitest](https://vitest.dev/) 3 + [Testing Library](https://testing-library.com/) 16 | Unit and component tests |
 
 Hand-written CSS with CSS variables — no Tailwind, no CSS-in-JS.

@@ -122,6 +122,8 @@ function App() {
   const dataReceived = useRef(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  // Narrow layouts hide the search field until it is opened.
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     if (!INSIDE_SN) return;
@@ -439,7 +441,8 @@ function App() {
       switch (e.key) {
         case '/':
           e.preventDefault();
-          searchInputRef.current?.focus();
+          setSearchOpen(true);
+          requestAnimationFrame(() => searchInputRef.current?.focus());
           break;
         case 'i':
           e.preventDefault();
@@ -570,6 +573,8 @@ function App() {
         onShowExport={() => setShowExport(true)}
         onShowShortcuts={() => setShowShortcuts(true)}
         searchRef={searchInputRef}
+        searchOpen={searchOpen}
+        onSearchOpenChange={setSearchOpen}
       />
       {!otdDismissed && (
         <OnThisDayBanner
